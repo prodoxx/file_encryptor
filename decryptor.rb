@@ -3,29 +3,36 @@
 require_relative 'lib/file_utils'
 require_relative 'lib/secure_file'
 require "highline/import"
+
 begin
   raise StandardError.new('Error: required at least one file path as argument') if ARGV.size == 0
 
   password = ask 'Encryption Password: '
   print "\n"
 
-  salt_name = ask 'Salt Name: '
-  salt = SecureFile.new_salt
-  FileUtils.write_content(salt, "salt_#{salt_name}.txt")
+  salt_file_path = ask "Salt File: "
+  salt = FileUtils.read_content(salt_file_path)
 
   # stretches and hashes the password
   key = SecureFile.hash_password32(salt, password)
 
   SecureFile.setup(key)
 
-  # encrypt each file and save it
+  # decrypt each file and save it
   ARGV.each do |file_path|
-    original_base64 = FileUtils::file_to_base64(file_path)
-    encrypted_base64 = SecureFile.encrypt(original_base64)
+    encrypted_base64 = FileUtils.read_content(file_path)
+    decrypted_base64 = SecureFile.decrypt(encrypted_base64)
 
-    FileUtils.write_content(encrypted_base64, "#{file_path}_encrypted")
+    file_name = File.basename(file_path)
+    file_name.slice! '_encrypted'
+
+    dir_name = File.dirname(file_path)  
+
+    FileUtils.base64_to_file(decrypted_base64, "#{dir_name}/decrypted_#{file_name}")
   end
 
 rescue StandardError => error
   puts error.message
+  puts error.inspect
+  puts error.backtrace
 end
