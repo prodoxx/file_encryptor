@@ -20,6 +20,9 @@ begin
 
   # decrypt each file and save it
   ARGV.each do |file_path|
+
+    puts "Decrypting #{file_path}"
+
     encrypted_base64 = FileUtils.read_content(file_path)
     decrypted_base64 = SecureFile.decrypt(encrypted_base64)
 
@@ -30,6 +33,8 @@ begin
 
     FileUtils.base64_to_file(decrypted_base64, "#{dir_name}/decrypted_#{file_name}")
   end
+
+  puts 'Decryption Finished!'
 
 rescue StandardError => error
   puts error.message

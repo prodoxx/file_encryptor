@@ -20,11 +20,16 @@ begin
 
   # encrypt each file and save it
   ARGV.each do |file_path|
+
+    puts "Encrypting #{file_path}"
+
     original_base64 = FileUtils::file_to_base64(file_path)
     encrypted_base64 = SecureFile.encrypt(original_base64)
 
     FileUtils.write_content(encrypted_base64, "#{file_path}_encrypted")
   end
+
+  puts "Encryption Finished!"
 
 rescue StandardError => error
   puts error.message
