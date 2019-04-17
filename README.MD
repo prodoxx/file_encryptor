@@ -33,12 +33,12 @@ Ruby 2.5.3+
 
 To encrypt use the following format:
 
-*ruby encryptor [file_path] [file_path] ...*
+*ruby encryptor.rb [file_path] [file_path] ...*
 
 ##### Example
 
 ```
-$ ruby encryptor secret_file.docx
+$ ruby encryptor.rb secret_file.docx
 ```
 
 Output: 
@@ -55,12 +55,12 @@ Encryption Finished!
 
 To decrypt use the following format
 
-*ruby decryptor [file_path] [file_path] ...*
+*ruby decryptor.rb [file_path] [file_path] ...*
 
 ##### Example
 
 ```
-$ ruby decryptor secret_file.docx_encrypted
+$ ruby decryptor.rb secret_file.docx_encrypted
 ```
 
 Output: 
